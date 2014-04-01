@@ -1,4 +1,4 @@
-from vector import Vector2D
+from models.vector import Vector2D
 
 
 def fixed_distance_gravitation(space, node_l, node_r):
@@ -86,29 +86,15 @@ class Node(object):
         return 'Node %s(%s, %s)' % (self.id, self.pos.x, self.pos.y)
 
 
-def construct_demo_space_1():
-    a = Node(1, Vector2D(20, 20))
-    b = Node(2, Vector2D(20, 70))
-    c = Node(3, Vector2D(20, 120))
-
-    space = Space(gravitation_func=const_gravitation)
-
-    g = 20
-    space.connect(a, b, g)
-    space.connect(a, c, g)
-    space.connect(b, c, g)
-
-    return space
-
-
 def test():
     a = Node(1, Vector2D(0, 0))
-    b = Node(2, Vector2D(0, 10))
-    c = Node(3, Vector2D(0, 20))
+    b = Node(2, Vector2D(0, 30))
+    c = Node(3, Vector2D(0, 60))
 
-    space = Space(gravitation_func=const_gravitation)
+    space = Space(gravitation_func=fixed_distance_gravitation, size=(600, 600),
+                  no_relevance_distance=20)
 
-    g = 20
+    g = 1
     space.connect(a, b, g)
     space.connect(a, c, g)
     space.connect(b, c, g)
@@ -118,7 +104,7 @@ def test():
     space.step_forward()
     space.step_forward()
 
-    assert b.pos.y == 10  # Unmoved.
+    assert b.pos.y == 30  # Unmoved.
 
 
 if __name__ == '__main__':
