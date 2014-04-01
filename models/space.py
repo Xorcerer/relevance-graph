@@ -5,8 +5,8 @@ def fixed_distance_gravitation(space, node_l, node_r):
     relevance = space.connections.get((node_l, node_r), 0)
     diff = space.diff_from_best_distance(node_l, node_r)
     if diff > 0:
-        return diff * relevance
-    return diff  # return a consistant strong repulsion if too closed.
+        return relevance
+    return -1  # return a consistant strong repulsion if too closed.
 
 
 class Space(object):

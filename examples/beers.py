@@ -1,7 +1,7 @@
 import math
 from ui.dashboard import DashBoard
-import space as space_mod
-from space import Space, Node, Vector2D
+import models.space as space_mod
+from models.space import Space, Node, Vector2D
 
 
 def pos_in_circle(center, r, split_count, index):
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     space = Space(gravitation_func=space_mod.fixed_distance_gravitation,
                   size=(600, 600), )
 
-    with open('fixtures/beers.tsv', 'r') as f:
+    with open('examples/fixtures/beers.tsv', 'r') as f:
         f.readline()
         row_index = 1
         for l in f:
