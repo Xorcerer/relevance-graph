@@ -55,7 +55,7 @@ class Space(object):
         for n in self.nodes:
             yield n
 
-    def step_forward(self):
+    def step_forward(self, step_length=0.1):
         steps = {}  # node: vector
 
         for n in self.nodes:
@@ -67,14 +67,14 @@ class Space(object):
 
                 grav = self.gravitation_between(n, another)
                 direction = (another.pos - n.pos).normalized
-                sub_step = direction * grav * 0.1
+                sub_step = direction * grav * step_length
                 sub_steps.append(sub_step)
 
             step = sum(sub_steps, Vector2D(0, 0))
             steps[n] = step
 
         for n, step in steps.items():
-            n.pos = n.pos + step
+            n.move(step)
 
 
 class Node(object):
@@ -84,6 +84,9 @@ class Node(object):
 
     def __str__(self):
         return 'Node %s(%s, %s)' % (self.id, self.pos.x, self.pos.y)
+
+    def move(self, offset):
+        self.pos = self.pos + offset
 
 
 def test():
@@ -104,7 +107,9 @@ def test():
     space.step_forward()
     space.step_forward()
 
+    assert a.pos.y > 0
     assert b.pos.y == 30  # Unmoved.
+    assert a.pos.y < 60
 
 
 if __name__ == '__main__':
