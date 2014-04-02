@@ -30,8 +30,9 @@ class Space(object):
         if not relevance:
             return self.no_relevance_distance
 
-        return (self.no_relevance_distance * (relevance - self.min_relevance) /
-                (self.max_relevance - self.min_relevance))
+        rate = (self.max_relevance - relevance) /\
+               (self.max_relevance - self.min_relevance)
+        return (self.no_relevance_distance * (rate ** 2))
 
     def diff_from_best_distance(self, node_l, node_r):
         return node_l.pos.distance_to(node_r.pos) - \

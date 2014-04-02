@@ -23,7 +23,7 @@ nodes = {i: Node(i, pos_in_circle(center, 200, 50, i)) for i in xrange(1, 51)}
 
 
 if __name__ == '__main__':
-    space = Space(size=(600, 600), step_factor=0.00001)
+    space = Space(size=(600, 600), step_factor=0.0001)
 
     with open('examples/fixtures/beers.tsv', 'r') as f:
         f.readline()

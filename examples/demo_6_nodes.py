@@ -4,7 +4,7 @@ from models.space import Space, Node, Vector2D
 
 if __name__ == '__main__':
     space = Space(size=(600, 600), no_relevance_distance=100,
-                  step_factor=0.00001)
+                  step_factor=0.0001)
 
     center = Node(0, Vector2D(100, 100), color=(1.0, 1.0, 0.5))
     a = Node(1, Vector2D(100, 110))

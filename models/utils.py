@@ -71,7 +71,7 @@ def coulomb_force(space, dest_node, src_node):
     diff = space.diff_from_best_distance(src_node, dest_node)
     if diff >= 0:
         return 0
-    k = -1.0
+    k = -.5
     return k * (diff ** 2)
 
 
