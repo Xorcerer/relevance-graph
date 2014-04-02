@@ -1,18 +1,14 @@
 from models.vector import Vector2D
-
-
-def fixed_distance_gravitation(space, node_l, node_r):
-    relevance = space.connections.get((node_l, node_r), 0)
-    diff = space.diff_from_best_distance(node_l, node_r)
-    if diff > 0:
-        return relevance
-    return -1  # return a consistant strong repulsion if too closed.
+from models.utils import default_force_func
 
 
 class Space(object):
-    def __init__(self, gravitation_func, size, no_relevance_distance=100,
+    def __init__(self, size, gravitation_func=default_force_func,
+                 step_factor=0.01,
+                 no_relevance_distance=100,
                  min_relevance=0.0, max_relevance=1.0):
         self.gravitation_func = gravitation_func
+        self.step_factor = step_factor
 
         self.size = size
         self.nodes = set()
@@ -45,6 +41,9 @@ class Space(object):
         return self.gravitation_func(self, node_l, node_r)
 
     def connect(self, node_l, node_r, relevance):
+        self.min_relevance = min(relevance, self.min_relevance)
+        self.max_relevance = max(relevance, self.max_relevance)
+
         self.add_range((node_l, node_r))
 
         # Undirected.
@@ -65,22 +64,21 @@ class Space(object):
                 if n == another:
                     continue
 
-                grav = self.gravitation_between(n, another)
-                direction = (another.pos - n.pos).normalized
-                sub_step = direction * grav * step_length
+                sub_step = self.gravitation_between(n, another)
                 sub_steps.append(sub_step)
 
             step = sum(sub_steps, Vector2D(0, 0))
-            steps[n] = step
+            steps[n] = step * self.step_factor
 
         for n, step in steps.items():
             n.move(step)
 
 
 class Node(object):
-    def __init__(self, id, pos):
+    def __init__(self, id, pos, color=None):
         self.id = id
         self.pos = pos
+        self.color = color
 
     def __str__(self):
         return 'Node %s(%s, %s)' % (self.id, self.pos.x, self.pos.y)
@@ -94,7 +92,7 @@ def test():
     b = Node(2, Vector2D(0, 30))
     c = Node(3, Vector2D(0, 60))
 
-    space = Space(gravitation_func=fixed_distance_gravitation, size=(600, 600),
+    space = Space(size=(600, 600),
                   no_relevance_distance=20)
 
     g = 1
@@ -110,7 +108,3 @@ def test():
     assert a.pos.y > 0
     assert b.pos.y == 30  # Unmoved.
     assert a.pos.y < 60
-
-
-if __name__ == '__main__':
-    test()

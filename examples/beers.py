@@ -1,6 +1,5 @@
 import math
 from ui.dashboard import DashBoard
-import models.space as space_mod
 from models.space import Space, Node, Vector2D
 
 
@@ -24,8 +23,7 @@ nodes = {i: Node(i, pos_in_circle(center, 200, 50, i)) for i in xrange(1, 51)}
 
 
 if __name__ == '__main__':
-    space = Space(gravitation_func=space_mod.fixed_distance_gravitation,
-                  size=(600, 600), )
+    space = Space(size=(600, 600), step_factor=0.00001)
 
     with open('examples/fixtures/beers.tsv', 'r') as f:
         f.readline()
@@ -35,7 +33,6 @@ if __name__ == '__main__':
             node1 = nodes[row_index]
 
             for i, value in enumerate(row[1:]):
-                print i, value
                 value = normalize(value)
                 if value == 0:
                     continue
