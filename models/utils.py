@@ -10,7 +10,7 @@ def distance_limiter(min_gravitation_distance, max_repulsion_distance):
 
             distance = dest_node.pos.distance_to(src_node.pos)
             if r > 0 and distance < min_gravitation_distance:
-                return -r
+                return 0
             if r < 0 and distance > max_repulsion_distance:
                 return 0
             return r
@@ -66,7 +66,9 @@ def hook_force(space, dest_node, src_node):
 
 @directional
 def coulomb_force(space, dest_node, src_node):
-    'F = k / r ^ 2.'
+    '''Theoretically: F = k / r ^ 2.
+       The implementation is a bit DIFFERENT from thoerem.
+    '''
 
     diff = space.diff_from_best_distance(src_node, dest_node)
     if diff >= 0:
