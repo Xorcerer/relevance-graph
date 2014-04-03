@@ -5,11 +5,9 @@ from models.space import Space, Node, Vector2D
 
 def pos_in_circle(center, r, split_count, index):
     radian = 2 * math.pi / split_count * index
-    print radian
     x = r * math.cos(radian)
     y = r * math.sin(radian)
 
-    print x, y
     return center + Vector2D(x, y)
 
 

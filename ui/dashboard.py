@@ -10,8 +10,7 @@ WHITE = Color(1., 1., 1.)
 
 
 class NodeWidget(Widget):
-    def __init__(self, **kwargs):
-        node = kwargs.pop('node')
+    def __init__(self, node, **kwargs):
         self.node = node
 
         super(self.__class__, self).__init__(**kwargs)
@@ -35,7 +34,6 @@ class BoardWidget(FloatLayout):
     def __init__(self, size, space):
         super(self.__class__, self).__init__(size=size)
 
-        print self.canvas
         self.space = space
 
         self.widgets = []
@@ -51,7 +49,6 @@ class BoardWidget(FloatLayout):
                 if other.id >= n.id or relevance == 0:
                     continue
 
-                print relevance
                 l = Line(points=[n.pos.x, n.pos.y, other.pos.x, other.pos.y],
                          width=1.0)
                 self.canvas.add(Color(relevance, relevance, relevance))
@@ -82,7 +79,6 @@ class DashBoard(App):
 
         self.board_size = self.space.size
         Clock.schedule_interval(self.update, .1)
-        print 'map size: %s' % (self.board_size,)
         self.board = BoardWidget(self.board_size, self.space)
 
         return self.board
