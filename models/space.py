@@ -1,14 +1,16 @@
 from models.vector import Vector2D
-from models.utils import default_force_func
+from models.forces import default_force_func
 
 
 class Space(object):
     def __init__(self, size, gravitation_func=default_force_func,
-                 step_factor=0.01,
+                 step_factor=None,
+                 max_step_length=1,
                  no_relevance_distance=100,
                  min_relevance=0.0, max_relevance=1.0):
         self.gravitation_func = gravitation_func
         self.step_factor = step_factor
+        self.max_step_length = max_step_length
 
         self.size = size
         self.nodes = set()
@@ -32,7 +34,7 @@ class Space(object):
 
         rate = (self.max_relevance - relevance) /\
                (self.max_relevance - self.min_relevance)
-        return (self.no_relevance_distance * (rate ** 2))
+        return self.no_relevance_distance * (rate ** 2)
 
     def diff_from_best_distance(self, node_l, node_r):
         return node_l.pos.distance_to(node_r.pos) - \
@@ -58,6 +60,7 @@ class Space(object):
     def step_forward(self, step_length=0.1):
         steps = {}  # node: vector
 
+        longest_step_length = 0
         for n in self.nodes:
             sub_steps = []
             # FIXME: Speed up by enumerate over actually connected nodes only.
@@ -69,10 +72,13 @@ class Space(object):
                 sub_steps.append(sub_step)
 
             step = sum(sub_steps, Vector2D(0, 0))
-            steps[n] = step * self.step_factor
+            longest_step_length = max(longest_step_length, step.length)
+            steps[n] = step
 
+        step_factor = (self.step_factor or
+                       (self.max_step_length / longest_step_length))
         for n, step in steps.items():
-            n.move(step)
+            n.move(step * step_factor)
 
 
 class Node(object):
