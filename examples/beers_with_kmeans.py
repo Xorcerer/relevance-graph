@@ -80,8 +80,6 @@ if __name__ == '__main__':
     with StopWatch(log):
         nodes_matrix, labels, centers = cluster_by_k_means(space, center_count)
 
-    log(labels, centers)
-
     log('Preparing plot...')
     colors = ['#4EACC5', '#FF9C34', '#4E9A06']
 
@@ -92,6 +90,10 @@ if __name__ == '__main__':
         is_member_matrix = labels == i
         ax.plot(nodes_matrix[is_member_matrix, 0],
                 nodes_matrix[is_member_matrix, 1], 'o',
-                markerfacecolor=colors[i], markersize=6)
+                markerfacecolor=colors[i], markersize=5)
+
+        ax.plot(centers[i][0],
+                centers[i][1], 'o',
+                markerfacecolor=colors[i], markersize=10)
 
     pl.show()
