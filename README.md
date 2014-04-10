@@ -35,6 +35,10 @@ beers:
 
 ![graph of beers](https://raw.githubusercontent.com/Xorcerer/relevance-graph/master/screenshots/screenshot-1-beers.png)
 
+beers[clustered]:
+
+![graph of beers](https://raw.githubusercontent.com/Xorcerer/relevance-graph/master/screenshots/screenshot-2-beers.png)
+
 
 Plan
 ----
